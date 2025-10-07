@@ -1,0 +1,57 @@
+# data/campus_data.py
+# Hardcoded campus locations and route data for demonstration.
+
+LOCATIONS = {
+    "Main Gate": {"lat": 12.9716, "lon": 77.5946},
+    "Library": {"lat": 12.9721, "lon": 77.5950},
+    "Hostel Complex": {"lat": 12.9700, "lon": 77.5960},
+    "Sports Complex": {"lat": 12.9730, "lon": 77.5935},
+}
+
+# Each route combo includes two alternatives: fast and eco
+# Distances in km, time in minutes
+ROUTES = [
+    {
+        "from": "Main Gate",
+        "to": "Library",
+        "fast": {"distance_km": 1.0, "time_min": 4},
+        "eco":  {"distance_km": 1.2, "time_min": 6},
+    },
+    {
+        "from": "Main Gate",
+        "to": "Hostel Complex",
+        "fast": {"distance_km": 1.5, "time_min": 6},
+        "eco":  {"distance_km": 1.8, "time_min": 8},
+    },
+    {
+        "from": "Main Gate",
+        "to": "Sports Complex",
+        "fast": {"distance_km": 2.0, "time_min": 7},
+        "eco":  {"distance_km": 2.5, "time_min": 9},
+    },
+    {
+        "from": "Library",
+        "to": "Hostel Complex",
+        "fast": {"distance_km": 1.0, "time_min": 5},
+        "eco":  {"distance_km": 1.3, "time_min": 7},
+    },
+    {
+        "from": "Library",
+        "to": "Sports Complex",
+        "fast": {"distance_km": 1.6, "time_min": 6},
+        "eco":  {"distance_km": 2.0, "time_min": 8},
+    },
+    {
+        "from": "Hostel Complex",
+        "to": "Sports Complex",
+        "fast": {"distance_km": 1.8, "time_min": 7},
+        "eco":  {"distance_km": 2.2, "time_min": 9},
+    },
+]
+
+EMISSION_FACTORS_G_PER_KM = {
+    "Car": 120.0,  # grams CO2 per km
+    "EV": 40.0,
+    "Bike": 0.0,
+    "Walk": 0.0,
+}

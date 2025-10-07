@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {
+      "distance": 2500,
+      "duration": 600,
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [77.1, 28.6],
+          [77.101, 28.601],
+          [77.102, 28.602]
+        ]
+      }
+    }
+  ]
+}

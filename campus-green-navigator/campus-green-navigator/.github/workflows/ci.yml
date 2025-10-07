@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  test:
+    name: Run tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python-version: [3.12]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: ${{ runner.os }}-pip-
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          if [ -f requirements.txt ]; then
+            pip install -r requirements.txt
+          fi
+          # install dev/test tools
+          pip install -r requirements-dev.txt
+
+      - name: Lint (flake8)
+        run: |
+          echo 'Running flake8'
+          flake8 || true
+
+      - name: Smoke test mock API
+        run: |
+          echo 'Starting mock API in background'
+          python -m uvicorn api.mock_server:app --port 8000 &
+          MOCK_PID=$!
+          # wait for server to start
+          sleep 2
+          echo 'Checking /parking endpoint'
+          curl -sS http://127.0.0.1:8000/parking?hours=3 | jq . > /dev/null
+          echo 'Checking /route endpoint (may return 404 if route missing)'
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:8000/route?start=Library&end=Cafeteria") || true
+          echo "Route endpoint returned $HTTP_CODE"
+          kill $MOCK_PID || true
+
+      - name: Type check (mypy)
+        run: |
+          echo 'Running mypy'
+          mypy || true
+
+      - name: Run tests with coverage
+        run: |
+          pytest --cov=.
