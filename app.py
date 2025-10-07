@@ -1,3 +1,4 @@
+from streamlit_folium import st_folium
 import os
 import joblib
 import pandas as pd
@@ -15,6 +16,23 @@ from components.points_system import (
 
 
 def render() -> None:
+    # Interactive map (Leaflet via streamlit-folium)
+    st.markdown("## Campus Map")
+    import folium
+    # Center map on campus
+    center = [12.9716, 77.5946]
+    m = folium.Map(location=center, zoom_start=17)
+    # Add markers for locations
+    for name, loc in campus_data.LOCATIONS.items():
+        folium.Marker([loc["lat"], loc["lon"]], popup=name).add_to(m)
+    # Draw routes
+    for route in campus_data.ROUTES:
+        points = [
+            [campus_data.LOCATIONS[route["from"]]["lat"], campus_data.LOCATIONS[route["from"]]["lon"]],
+            [campus_data.LOCATIONS[route["to"]]["lat"], campus_data.LOCATIONS[route["to"]]["lon"]],
+        ]
+        folium.PolyLine(points, color="green", weight=4, opacity=0.7).add_to(m)
+    st_folium(m, width=700, height=400)
     st.set_page_config(page_title="Campus Green Navigator", layout="wide")
 
     # Initialize session
