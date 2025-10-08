@@ -10,6 +10,18 @@ import os
 import json
 from streamlit.components.v1 import html as components_html
 
+# Defensive import: streamlit-folium may not be installed in some deploy environments.
+# Import it lazily and provide a fallback to avoid ModuleNotFoundError during import time.
+try:
+    from streamlit_folium import st_folium  # noqa: F401
+    _HAS_ST_FOLIUM = True
+except Exception:
+    # Provide a fallback function that renders a helpful message in the Streamlit app
+    _HAS_ST_FOLIUM = False
+    def st_folium(*args, **kwargs):
+        st.warning("streamlit-folium is not installed. Map embedding disabled. Install 'streamlit-folium' to enable interactive maps.")
+        return None
+
 
 def render():
     st.set_page_config(page_title="Campus Green Navigator", layout="wide")
