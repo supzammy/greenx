@@ -27,7 +27,12 @@ def get_route(start: str, end: str) -> Dict[str, Any]:
     try:
         resp = requests.get(f"{BASE_URL}/route", params={"start": start, "end": end}, timeout=3)
         resp.raise_for_status()
-        return resp.json()
+        data = resp.json()
+        # Validate that the backend/mock returned the expected structure. If not,
+        # treat it as an error so we can fallback to the local campus_data.
+        if not isinstance(data, dict) or not all(k in data for k in ("from_loc", "to_loc", "fast", "eco")):
+            raise ValueError("Invalid route response from backend")
+        return data
     except Exception:
         # local fallback in-process
         for r in campus_data.ROUTES:
