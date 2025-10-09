@@ -1,1 +1,55 @@
 .env
+
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.pyo
+*.pyd
+*.so
+
+# Distribution / packaging
+*.egg-info/
+dist/
+build/
+.eggs/
+pip-wheel-metadata/
+
+# Coverage and test output
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+coverage.xml
+nosetests.xml
+pytest_cache/
+/.pytest_cache/
+
+# Mypy cache
+.mypy_cache/
+
+# Database
+*.sqlite3
+
+# System files
+.DS_Store
+
+# Editor directories and files
+.vscode/
+.idea/
+*~
+.swp
+
+# Logs
+*.log
+
+# Jupyter
+.ipynb_checkpoints
