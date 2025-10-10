@@ -10,4 +10,4 @@ matplotlib
 seaborn
 
 # For embedding folium maps inside Streamlit
-streamlit-folium>=0.20.0
+streamlit-folium==0.21.0
