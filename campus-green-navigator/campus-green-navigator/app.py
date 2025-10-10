@@ -1,6 +1,7 @@
 # app.py
 import os
 import joblib
+import json
 import pandas as pd
 import streamlit as st
 
@@ -8,29 +9,17 @@ from data import campus_data
 from utils.helpers import calculate_co2_grams, format_minutes
 from api.client import get_route, get_parking
 from components.points_system import init_points, redeem_reward, REWARDS
-import json
 from streamlit.components.v1 import html as components_html
 
 # Defensive import: streamlit-folium may not be installed in some deploy environments.
 # Import lazily and provide a fallback to avoid ModuleNotFoundError during import time.
 try:
-    from streamlit_folium import st_folium  # noqa: F401
+    from streamlit_folium import st_folium  # type: ignore
     _HAS_ST_FOLIUM = True
 except Exception:
     _HAS_ST_FOLIUM = False
     def st_folium(*args, **kwargs):
-        st.warning("streamlit-folium is not installed. Map embedding disabled. Install 'streamlit-folium' to enable interactive maps.")
-        return None
-
-# Defensive import: streamlit-folium may not be installed in some deploy environments.
-# Import it lazily and provide a fallback to avoid ModuleNotFoundError during import time.
-try:
-    from streamlit_folium import st_folium  # noqa: F401
-    _HAS_ST_FOLIUM = True
-except Exception:
-    # Provide a fallback function that renders a helpful message in the Streamlit app
-    _HAS_ST_FOLIUM = False
-    def st_folium(*args, **kwargs):
+        # Use Streamlit warning at runtime; importing `st` above is safe
         st.warning("streamlit-folium is not installed. Map embedding disabled. Install 'streamlit-folium' to enable interactive maps.")
         return None
 
